@@ -1,45 +1,34 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import SafeView from "@/components/layout/SafeView";
+import { Tabs } from "expo-router";
+import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function TabsLayout() {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
+    <SafeView edges={["bottom"]}>
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          lazy: false,
+          tabBarShowLabel: false,
+          tabBarStyle: {
+            backgroundColor: "transparent",
+            position: "absolute",
+            borderTopWidth: 0,
+            elevation: 0,
+            height: 50,
           },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarActiveTintColor: "#2dd4bf",
+          tabBarBackground: () => null,
+          tabBarButton: ({ children, ...props }) => (
+            <TouchableOpacity
+              {...(props as TouchableOpacityProps)}
+              className="bg-blue-500 rounded-full p-3"
+            >
+              {children}
+            </TouchableOpacity>
+          ),
         }}
       />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
+    </SafeView>
   );
 }
