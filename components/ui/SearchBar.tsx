@@ -1,4 +1,8 @@
-import { City, setSelectedCity } from "@/store/features/citySlice";
+import {
+  City,
+  selectSelectedCity,
+  setSelectedCity,
+} from "@/store/features/citySlice";
 import { useLazyGetCitySearchCompletionQuery } from "@/store/features/weatherApi";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { BlurView } from "expo-blur";
@@ -7,6 +11,7 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { MagnifyingGlassIcon, XMarkIcon } from "react-native-heroicons/solid";
 
 export default function SearchBar() {
+  const selectedCity = useAppSelector(selectSelectedCity);
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [searchText, setSearchText] = useState("");
   const deferredSearchText = useDeferredValue(searchText);
@@ -17,6 +22,10 @@ export default function SearchBar() {
 
   const [searchTrigger, { data: searchResult_unprocessed, isLoading, error }] =
     useLazyGetCitySearchCompletionQuery();
+
+  useEffect(() => {
+    setShowSearch(true);
+  }, [selectedCity]);
 
   useEffect(() => {
     setSearchResult(searchResult_unprocessed ?? []);
