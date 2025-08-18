@@ -1,6 +1,10 @@
+import AnimatedSwipeableTabs from "@/components/layout/GestureHandler";
 import SafeView from "@/components/layout/SafeView";
+import SwipeableTabs from "@/components/layout/SwipeableTabs";
 import { Tabs } from "expo-router";
 import { TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Gesture } from "react-native-gesture-handler/lib/typescript/handlers/gestures/gesture";
 
 export default function TabsLayout() {
   return (

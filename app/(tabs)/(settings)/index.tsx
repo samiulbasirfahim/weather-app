@@ -28,8 +28,10 @@ export default function App() {
       >
         <Text style={styles.text}>{text}</Text>
       </BlurView>
-      <BlurView intensity={90} tint="dark" style={styles.blurContainer}
-
+      <BlurView
+        intensity={90}
+        tint="dark"
+        style={styles.blurContainer}
         experimentalBlurMethod="dimezisBlurView"
       >
         <Text style={[styles.text, { color: "#fff" }]}>{text}</Text>
