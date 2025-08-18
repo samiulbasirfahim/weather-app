@@ -2,9 +2,17 @@ import { Text, View } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectSelectedCity } from "@/store/features/citySlice";
+import { useEffect } from "react";
+import { useGetCityWeatherQuery } from "@/store/features/weatherApi";
 
 export default function WeatherDisplay() {
   const selectedCity = useAppSelector(selectSelectedCity);
+  const { data, isLoading, isError } = useGetCityWeatherQuery(
+    selectedCity?.id ?? "",
+  );
+
+  console.log(selectedCity);
+  console.log(data);
 
   return (
     <View className="flex-1 items-center justify-between">
@@ -16,7 +24,7 @@ export default function WeatherDisplay() {
       </Text>
       <View className="items-center w-full">
         <Text className="text-center text-white/50 font-bold text-9xl justify-start">
-          29°
+          {data?.temperature}°
         </Text>
         <Feather name="cloud-snow" size={80} color={"#fffFFF80"} />
       </View>

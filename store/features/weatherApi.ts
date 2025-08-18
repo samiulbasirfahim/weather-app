@@ -2,6 +2,15 @@ import { WEATHERAPIKEY } from "@/lib/config.env";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { City } from "./citySlice";
 
+export type WeatherInfo = {
+  temperature: number; // °C
+  feelsLike: number; // °C
+  condition: string; // "Partly Cloudy"
+  windKph: number; // km/h
+  humidity: number; // %
+  cloud: number; // %
+};
+
 const key = WEATHERAPIKEY;
 export const weatherApi = createApi({
   reducerPath: "weatherApi",
@@ -14,21 +23,41 @@ export const weatherApi = createApi({
   }),
   tagTypes: ["Weather", "Location"],
   endpoints: (builder) => ({
-    getCitySearchCompletion: builder.mutation<City[], string>({
+    getCityWeather: builder.query<WeatherInfo, string>({
+      query: (query) => ({
+        url: "current.json",
+        params: {
+          key: key,
+          q: query,
+        },
+      }),
+      transformResponse: (response: any): WeatherInfo => ({
+        temperature: response.current.temp_c,
+        feelsLike: response.current.feelslike_c,
+        condition: response.current.condition.text,
+        windKph: response.current.wind_kph,
+        humidity: response.current.humidity,
+        cloud: response.current.cloud,
+      }),
+
+      providesTags: (result, error, query) => [{ type: "Weather", id: query }],
+    }),
+
+    getCitySearchCompletion: builder.query<City[], string>({
       query: (query) => {
         console.log("Key: ", key);
         return {
           url: "search.json",
           params: {
-            key: "76b9e83684994413959223544251708",
+            key: key,
             q: query,
           },
         };
       },
       transformResponse: (response: any[]): City[] => {
-        console.log("response");
+        console.log(response);
         return response.map((item: any) => ({
-          id: item.id,
+          id: item.url,
           name: item.name,
           region: item.region,
           country: item.country,
@@ -36,8 +65,11 @@ export const weatherApi = createApi({
           lon: item.lon,
         }));
       },
+
+      providesTags: (result, error, query) => [{ type: "Location", id: query }],
     }),
   }),
 });
 
-export const { useGetCitySearchCompletionMutation } = weatherApi;
+export const { useLazyGetCitySearchCompletionQuery, useGetCityWeatherQuery } =
+  weatherApi;

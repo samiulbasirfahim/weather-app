@@ -2,7 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
 export interface City {
-  id: number;
+  id: string;
   name: string;
   region: string;
   country: string;

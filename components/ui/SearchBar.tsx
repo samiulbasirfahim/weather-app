@@ -1,5 +1,5 @@
 import { City, setSelectedCity } from "@/store/features/citySlice";
-import { useGetCitySearchCompletionMutation } from "@/store/features/weatherApi";
+import { useLazyGetCitySearchCompletionQuery } from "@/store/features/weatherApi";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { BlurView } from "expo-blur";
 import { useDeferredValue, useEffect, useRef, useState } from "react";
@@ -16,7 +16,7 @@ export default function SearchBar() {
   const [searchResult, setSearchResult] = useState<City[]>([]);
 
   const [searchTrigger, { data: searchResult_unprocessed, isLoading, error }] =
-    useGetCitySearchCompletionMutation();
+    useLazyGetCitySearchCompletionQuery();
 
   useEffect(() => {
     setSearchResult(searchResult_unprocessed ?? []);
